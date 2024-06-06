@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL")
+}
+
+// Definizione dell'enum Status
+enum Status {
+  PAID
+  PENDING
+}
+
+model User {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  password     String
+  email        String   @unique
+  // Relazione con Appointment e Customer
+  appointments Appointment[]
+  customers    Customer[]
+}
+
+model Customer {
+  id          String       @id @default(uuid())
+  name        String
+  email       String       @unique
+  phoneNumber String?
+  userId      String
+  // Relazione con User e Appointments
+  user         User          @relation(fields: [userId], references: [id])
+  appointments Appointment[]
+}
+
+model Appointment {
+  id          String      @id @default(uuid())
+  userId      String
+  customerId  String
+  date        DateTime
+  startTime   DateTime
+  endTime     DateTime
+  cost        Float?
+  status      Status?  // Usa l'enum Status per il campo status
+  notes       String?
+  type        String
+  // Relazioni con User e Client
+  user        User       @relation(fields: [userId], references: [id])
+  customer      Customer   @relation(fields: [customerId], references: [id])
+
+  @@index([userId])
+  @@index([customerId])
+}
