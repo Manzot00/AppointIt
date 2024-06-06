@@ -103,7 +103,7 @@ export default function LoginForm() {
         </div>
         <LoginButton />
         <br /> <hr /> <br />
-        <p style={{ fontSize: '15px' }}>If you don't have an account, please <Link href="/register" className='text-blue-500 underline'>Sign Up</Link></p>
+        <p style={{ fontSize: '15px' }}>If you don&apos;t have an account, please <Link href="/register" className='text-blue-500 underline'>Sign Up</Link></p>
         <div className="flex h-8 items-end space-x-1">
           {/* Add form errors here */}
         </div>
