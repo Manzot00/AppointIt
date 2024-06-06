@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
             password: { label: "Password", type: "password" }
           },
           async authorize(credentials) {
-            console.log('Authorize called with credentials:', credentials);
+            //console.log('Authorize called with credentials:', credentials);
 
             if (!credentials?.email || !credentials?.password) {
                 console.error('Missing email or password');
@@ -46,11 +46,11 @@ export const authOptions: NextAuthOptions = {
                 return null
             }
 
-            /*console.log('User authenticated:', {
+            console.log('User authenticated:', {
                 id: existingUser.id,
                 username: existingUser.username,
                 email: existingUser.email
-              });*/
+              });
 
             return {
                 id: existingUser.id,
@@ -68,7 +68,8 @@ export const authOptions: NextAuthOptions = {
                 ...session,
                 user: {
                     ...session.user,
-                    username: token.username
+                    username: token.username,
+                    id: token.id
                 }
             }
           },
@@ -77,7 +78,8 @@ export const authOptions: NextAuthOptions = {
             if(user){
                 return{
                     ...token,
-                    username: user.username
+                    username: user.username,
+                    id: user.id
                 }
             }
             return token

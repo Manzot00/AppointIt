@@ -32,6 +32,7 @@ model User {
 model Customer {
   id          String       @id @default(uuid())
   name        String
+  surname     String
   email       String       @unique
   phoneNumber String?
   userId      String

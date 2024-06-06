@@ -3,9 +3,11 @@ import { lusitana } from '@/app/ui/fonts';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../lib/auth';
 import Link from 'next/link';
+import db from '@/app/lib/db';
  
 export default async function Page() {
   const session = await getServerSession(authOptions);
+  console.log(session);
   
   return (
     <main>
