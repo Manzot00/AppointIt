@@ -8,6 +8,11 @@
     "start": "next start"
   },
   "dependencies": {
+    "@fullcalendar/core": "^6.1.14",
+    "@fullcalendar/daygrid": "^6.1.14",
+    "@fullcalendar/interaction": "^6.1.14",
+    "@fullcalendar/react": "^6.1.14",
+    "@fullcalendar/timegrid": "^6.1.14",
     "@heroicons/react": "^2.0.18",
     "@hookform/resolvers": "^3.5.0",
     "@next-auth/prisma-adapter": "^1.0.7",

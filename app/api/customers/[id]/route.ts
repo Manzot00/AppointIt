@@ -1,16 +1,16 @@
 import { NextResponse } from "next/server";
 import db from "@/app/lib/db";
-import { parse } from 'url';
 
-export async function GET(req: Request) {
-    const { query } = parse(req.url!, true); // Effettua il parsing dell'URL per ottenere i parametri di query
-    
-    const userId = query.userId as string;
+export async function GET(req: Request, { params }: { params: { id: string } }) {
+    const { id: userId } = params;
 
     try {
         const customers = await db.customer.findMany({
             where: {
                 userId: userId
+            },
+            orderBy: {
+                surname: 'asc'
             }
         });
         return NextResponse.json({ customers }, { status: 200 });

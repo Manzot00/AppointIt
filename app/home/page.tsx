@@ -7,7 +7,7 @@ import db from '@/app/lib/db';
  
 export default async function Page() {
   const session = await getServerSession(authOptions);
-  console.log(session);
+  //console.log(session);
   
   return (
     <main>
