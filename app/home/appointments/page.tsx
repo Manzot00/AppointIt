@@ -1,33 +1,41 @@
-"use client";
+import Calendar from "@/app/ui/invoices/calendar";
+import { lusitana } from '@/app/ui/fonts';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/lib/auth';
+import db from '@/app/lib/db';
 
-import React from 'react';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
+export default async function AppointmentsPage() {
+  const session = await getServerSession(authOptions);
 
-export default function AppointmentsPage() {
+  const appointments = await db.appointment.findMany({
+    where: { userId: session?.user.id },
+    include: { customer: true },
+  });
+
+  const customers = await db.customer.findMany({
+    where: { userId: session?.user.id },
+  });
+
+  const formattedAppointments = appointments.map(appointment => ({
+    id: appointment.id,
+    title: `${appointment.type} - ${appointment.customer.name} ${appointment.customer.surname}`,
+    start: appointment.startTime.toISOString(),
+    end: appointment.endTime.toISOString(),
+    extendedProps: {
+      customer: appointment.customer,
+      type: appointment.type,
+      cost: appointment.cost,
+      notes: appointment.notes,
+      status: appointment.status,
+    },
+  }));
+
   return (
-    <div className="w-full h-screen">
-      <h1 className="text-2xl mb-4">Appointments</h1>
-      <div className="flex flex-col items-center justify-center h-full">
-        <div className="w-full h-full">
-          <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            initialView="timeGridWeek" // Imposta la vista settimanale come predefinita
-            headerToolbar={{
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridDay', // Viste disponibili
-            }}
-            slotMinTime="00:00:00"
-            slotMaxTime="24:00:00"
-            scrollTime="07:00:00"
-            events={[]} // Puoi aggiungere eventi qui
-            height="85%" // Imposta l'altezza del calendario
-          />
-        </div>
-      </div>
+    <div className="w-full">
+      <h1 className={`${lusitana.className} mb-8 text-xl md:text-2xl`}>
+        Appointments
+      </h1>
+      <Calendar appointments={formattedAppointments} customers={customers}/>
     </div>
   );
 }

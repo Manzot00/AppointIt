@@ -16,3 +16,36 @@ input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.fc-scrollgrid-sync-table {
+  @apply w-full;
+}
+
+.fc-h-event {
+  @apply bg-blue-500 border border-blue-600 ;
+  
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  @apply bg-blue-100 ;
+}
+
+.fc-timegrid-col.fc-day-today .fc-timegrid-col-frame {
+  @apply bg-blue-50;
+}
+
+.fc .fc-button{
+  @apply bg-blue-800 hover:bg-blue-900  ;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+  @apply bg-blue-600;
+}
+
+.fc .fc-button-primary:disabled {
+  @apply bg-blue-600;
+}
+.fc-v-event {
+  @apply bg-blue-500 border border-blue-600 ;
+  
+}

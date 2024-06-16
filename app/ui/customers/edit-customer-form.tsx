@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { lusitana } from '@/app/ui/fonts';
 
 const FormSchema = z.object({
     name: z.string().min(1, 'Name is required'),
