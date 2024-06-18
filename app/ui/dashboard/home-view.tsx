@@ -88,7 +88,7 @@ export default function HomeView() {
         <div className="flex flex-col md:flex-row md:space-x-4">
           {data.todayAppointments.length > 0 ? (
             <div className="w-full md:w-1/2 h-[550px] mb-4 md:mb-0">
-              <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>Today's Appointments: {data.today}</h2>
+              <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>Today&apos;s Appointments: {data.today}</h2>
               <FullCalendar
                 plugins={[timeGridPlugin]}
                 initialView="timeGridDay"
