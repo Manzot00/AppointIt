@@ -9,6 +9,7 @@ import Modal from '@/app/ui/appointments/modal';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { lusitana } from '@/app/ui/fonts';
 
 interface Customer {
     id: string;
@@ -51,12 +52,16 @@ const FormSchema = z.object({
     }),
   status: z.string().min(1, 'Status is required'),
   notes: z.string().optional(),
+}).refine((data) => new Date(data.end) > new Date(data.start), {
+  message: 'End time must be greater than start time',
+  path: ['end'], // Set the error path to 'end'
 });
 
 export default function Calendar({ appointments, customers }: CalendarProps) {
   const [selectedEvent, setSelectedEvent] = useState<Appointment | null>(null);
   const [events, setEvents] = useState<Appointment[]>(appointments);
   const [isEditing, setIsEditing] = useState(false);
+  const [filterStatus, setFilterStatus] = useState<string>('ALL');
 
   const {
     register,
@@ -215,10 +220,31 @@ export default function Calendar({ appointments, customers }: CalendarProps) {
     }
   };
 
+  const filteredEvents = events.filter(event => 
+    filterStatus === 'ALL' || event.extendedProps.status === filterStatus
+  );
+
   return (
     <div className="w-full h-screen">
       <div className="flex flex-col items-center justify-center h-full">
         <div className="w-full h-full">
+          <div className="flex justify-between items-center mb-4">
+            <h1 className={`${lusitana.className} text-xl md:text-2xl`}>
+              Appointments
+            </h1>
+            <div className="flex items-center space-x-2">
+              <label className="text-sm font-medium">Filter by status:</label>
+              <select 
+                value={filterStatus} 
+                onChange={(e) => setFilterStatus(e.target.value)} 
+                className="border border-gray-300 rounded-md p-2"
+              >
+                <option value="ALL">All</option>
+                <option value="PENDING">Pending</option>
+                <option value="PAID">Paid</option>
+              </select>
+            </div>
+          </div>
           <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             initialView="timeGridWeek"
@@ -231,7 +257,7 @@ export default function Calendar({ appointments, customers }: CalendarProps) {
             slotMaxTime="24:00:00"
             scrollTime="07:00:00"
             firstDay={1}
-            events={events}
+            events={filteredEvents}
             eventClick={handleEventClick}
             dateClick={handleDateClick}
             allDaySlot={false}

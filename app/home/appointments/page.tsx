@@ -32,9 +32,6 @@ export default async function AppointmentsPage() {
 
   return (
     <div className="w-full">
-      <h1 className={`${lusitana.className} mb-8 text-xl md:text-2xl`}>
-        Appointments
-      </h1>
       <Calendar appointments={formattedAppointments} customers={customers}/>
     </div>
   );

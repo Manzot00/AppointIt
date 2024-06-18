@@ -8,10 +8,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { EditCustomerFormSkeleton } from '../skeletons';
 
 const FormSchema = z.object({
-    name: z.string().min(1, 'Name is required'),
-    surname: z.string().min(1, 'Surname is required'),
-    email: z.string().min(1, 'Email is required').email('Invalid email'),
-    phoneNumber: z.string().optional(),
+  name: z.string().min(1, 'Name is required'),
+  surname: z.string().min(1, 'Surname is required'),
+  email: z.string().min(1, 'Email is required').email('Invalid email'),
+  phoneNumber: z.string().min(1, 'Phone number is required')
+      .regex(/^\+?\d{0,12}$/, 'Phone number can only contain numbers and "+"')
+      .length(13, 'Phone number must be exactly 13 characters long (including "+" and 2 digits for country code)'),
 });
 
 interface Customer {
@@ -132,6 +134,7 @@ export default function EditCustomerForm({ id }: EditCustomerFormProps) {
             {...register('phoneNumber')}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
           />
+          {errors.phoneNumber && <span className="text-red-500 text-xs">{errors.phoneNumber.message}</span>}
         </div>
         <hr />
         <div className="flex justify-between">
