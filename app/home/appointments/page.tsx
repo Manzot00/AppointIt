@@ -1,4 +1,4 @@
-import Calendar from "@/app/ui/invoices/calendar";
+import Calendar from "@/app/ui/appointments/calendar";
 import { lusitana } from '@/app/ui/fonts';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/lib/auth';

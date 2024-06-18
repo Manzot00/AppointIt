@@ -5,6 +5,7 @@ import { Card } from '@/app/ui/dashboard/cards';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { lusitana } from '@/app/ui/fonts';
+import HomeSkeleton from '../skeletons';
 
 interface Customer {
   id: string;
@@ -43,11 +44,13 @@ export default function HomeView() {
     todayAppointments: [] as Appointment[],
     earningsData: [] as Earning[],
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getData = async () => {
       const data = await fetchData();
       setData(data);
+      setLoading(false);
     };
 
     getData();
@@ -64,8 +67,14 @@ export default function HomeView() {
 
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    return new Date(dateString).toLocaleDateString('en-US', options);
   };
+
+  if(loading){
+    return (
+      <HomeSkeleton />
+    );
+  }
 
   return (
     <div>
@@ -76,8 +85,8 @@ export default function HomeView() {
         <Card title="Total Customers" value={data.customers} type="customers" />
       </div>
       <div className="mt-6">
-        {data.todayAppointments.length > 0 ? (
-          <div className="flex flex-col md:flex-row md:space-x-4">
+        <div className="flex flex-col md:flex-row md:space-x-4">
+          {data.todayAppointments.length > 0 ? (
             <div className="w-full md:w-1/2 h-[550px] mb-4 md:mb-0">
               <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>Today's Appointments: {data.today}</h2>
               <FullCalendar
@@ -94,7 +103,12 @@ export default function HomeView() {
                 height="100%"
               />
             </div>
-            <div className="w-full md:w-1/2 h-auto max-h-[550px] overflow-y-auto md:border-gray-200 order-first md:order-none">
+        ) : (
+          <div className="w-full md:w-1/2 h-[550px] mb-4 md:mb-0">
+            <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>No Appointments Today</h2>
+          </div>
+        )}
+         <div className="w-full md:w-1/2 h-auto max-h-[550px] overflow-y-auto md:border-gray-200 order-first md:order-none">
               <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>Recent Earnings</h2>
               <table className="min-w-full bg-white border border-gray-200">
                 <thead>
@@ -114,9 +128,6 @@ export default function HomeView() {
               </table>
             </div>
         </div>
-        ) : (
-          <p>No appointments for today.</p>
-        )}
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { lusitana } from '@/app/ui/fonts';
 import ClientLayout from './ClientLayout';
 import SideNav from '@/app/ui/dashboard/sidenav';
+import { inter } from '@/app/ui/fonts';
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const session = await getServerSession(authOptions);
@@ -25,7 +26,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 
   return (
     <html lang="en">
-      <body>
+      <body className={`${inter.className} antialiased`}>
         <ClientLayout>
           <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
             <div className="w-full flex-none md:w-64">

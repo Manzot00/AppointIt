@@ -23,7 +23,7 @@ export async function POST(req: Request) {
             where: { email: email }
         });
         if(existingUserByEmial){
-            return NextResponse.json({ user: null, message: "User already exists" }, { status: 409 });
+            return NextResponse.json({ user: null, message: "User with this e-mail already exists" }, { status: 409 });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);

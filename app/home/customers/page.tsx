@@ -1,8 +1,6 @@
-import Search from '@/app/ui/search';
+import Search from '@/app/ui/customers/search';
 import CustomersTable from '@/app/ui/customers/table';
 import { lusitana } from '@/app/ui/fonts';
-import { Suspense } from 'react';
-import { InvoicesTableSkeleton } from '@/app/ui/skeletons';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/lib/auth';
 import db from '@/app/lib/db';
@@ -36,9 +34,7 @@ export default async function Page() {
         </Link>
       </div>
       <div className="mt-6">
-        <Suspense fallback={<InvoicesTableSkeleton />}>
-          <CustomersTable initialCustomers={customers} />
-        </Suspense>
+        <CustomersTable initialCustomers={customers} />
       </div>
     </div>
   );

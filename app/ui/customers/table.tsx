@@ -1,9 +1,10 @@
 "use client";
 
-import Pagination from '@/app/ui/invoices/pagination';
+import Pagination from '@/app/ui/customers/pagination';
 import { useState, useEffect } from 'react';
 import { TrashIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { CustomerTableSkeleton } from '../skeletons';
 
 interface Customer {
   id: string;

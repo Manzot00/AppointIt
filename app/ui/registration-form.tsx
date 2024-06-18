@@ -63,6 +63,11 @@ export default function RegistrationForm() {
       alert('Registration successful! Please login to continue');
       router.push('/login');
     } else{
+      if (response.status === 409) {
+        response.json().then(data => {
+          alert(data.message);
+        });
+      }
       console.error('Registration failed');
     }
   };

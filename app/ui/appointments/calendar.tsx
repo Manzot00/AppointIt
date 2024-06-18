@@ -5,7 +5,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import Modal from '@/app/ui/invoices/modal';
+import Modal from '@/app/ui/appointments/modal';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -230,6 +230,7 @@ export default function Calendar({ appointments, customers }: CalendarProps) {
             slotMinTime="00:00:00"
             slotMaxTime="24:00:00"
             scrollTime="07:00:00"
+            firstDay={1}
             events={events}
             eventClick={handleEventClick}
             dateClick={handleDateClick}

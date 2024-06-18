@@ -4,7 +4,6 @@ import { lusitana } from '@/app/ui/fonts';
 import {
   AtSymbolIcon,
   KeyIcon,
-  ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
@@ -45,10 +44,9 @@ export default function LoginForm() {
       password: values.password,
     });
 
-    //console.log('SignIn result:', signInData);
-    
     if (signInData?.error) {
-        console.error('Login failed:',signInData.error);
+        alert("Invalid email or password");
+        console.error('Login failed:', signInData.error);
     } else {
       router.refresh();
       router.push('/home');
@@ -105,7 +103,6 @@ export default function LoginForm() {
         <br /> <hr /> <br />
         <p style={{ fontSize: '15px' }}>If you don&apos;t have an account, please <Link href="/register" className='text-blue-500 underline'>Sign Up</Link></p>
         <div className="flex h-8 items-end space-x-1">
-          {/* Add form errors here */}
         </div>
       </div>
     </form>
