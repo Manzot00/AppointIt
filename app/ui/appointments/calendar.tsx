@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -110,6 +110,33 @@ export default function Calendar({ appointments, customers }: CalendarProps) {
       cost: event.extendedProps.cost?.toString() || '',
       status: event.extendedProps.status || '',
       notes: event.extendedProps.notes || 'PENDING',
+    });
+  };
+
+  const handleAddClick = () => {
+    setIsEditing(false);
+    setSelectedEvent({
+      id: '',
+      title: '',
+      start: '',
+      end: '',
+      extendedProps: {
+        customer: { id: '', name: '', surname: '' },
+        type: '',
+        cost: null,
+        notes: '',
+        status: '',
+      }
+    });
+
+    reset({
+      type: '',
+      customerId: '',
+      start: '',
+      end: '',
+      cost: '',
+      status: '',
+      notes: '',
     });
   };
 
@@ -249,9 +276,15 @@ export default function Calendar({ appointments, customers }: CalendarProps) {
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             initialView="timeGridWeek"
             headerToolbar={{
-              left: 'prev,next today',
+              left: 'prev,next today addEventButton',
               center: 'title',
               right: 'dayGridMonth,timeGridWeek,timeGridDay',
+            }}
+            customButtons={{
+              addEventButton: {
+                text: '+Add',
+                click: handleAddClick,
+              },
             }}
             slotMinTime="00:00:00"
             slotMaxTime="24:00:00"
@@ -262,6 +295,58 @@ export default function Calendar({ appointments, customers }: CalendarProps) {
             dateClick={handleDateClick}
             allDaySlot={false}
             height="85%"
+            viewDidMount={({ view }) => {
+              const handleMouseEnter = (event: Event) => {
+                const target = event.target as HTMLElement;
+                // Determina il selettore in base alla vista corrente
+                let selector = '';
+                if (view.type === 'timeGridDay') {
+                  selector = 'fc-timegrid-slot';
+                } else if (view.type === 'timeGridWeek') {
+                  selector = 'fc-timegrid-slot-lane';
+                } else if (view.type === 'dayGridMonth') {
+                  selector = 'fc-daygrid-day';
+                }
+            
+                if (target.classList.contains(selector)) {
+                  target.style.backgroundColor = '#f0f0f0';
+                }
+              };
+            
+              const handleMouseLeave = (event: Event) => {
+                const target = event.target as HTMLElement;
+                // Determina il selettore in base alla vista corrente
+                let selector = '';
+                if (view.type === 'timeGridDay') {
+                  selector = 'fc-timegrid-slot';
+                } else if (view.type === 'timeGridWeek') {
+                  selector = 'fc-timegrid-slot-lane';
+                } else if (view.type === 'dayGridMonth') {
+                  selector = 'fc-daygrid-day';
+                }
+            
+                if (target.classList.contains(selector)) {
+                  target.style.backgroundColor = '';
+                }
+              };
+            
+              // Aggiunge gli event listener al container appropriato per la vista corrente
+              let calendarContainerSelector = '';
+              if (view.type.includes('timeGrid')) {
+                calendarContainerSelector = '.fc-timegrid-body';
+              } else if (view.type === 'dayGridMonth') {
+                calendarContainerSelector = '.fc-daygrid-body';
+              }
+            
+              const calendarContainer = document.querySelector(calendarContainerSelector);
+              calendarContainer?.addEventListener('mouseenter', handleMouseEnter, true);
+              calendarContainer?.addEventListener('mouseleave', handleMouseLeave, true);
+            
+              return () => {
+                calendarContainer?.removeEventListener('mouseenter', handleMouseEnter, true);
+                calendarContainer?.removeEventListener('mouseleave', handleMouseLeave, true);
+              };
+            }}
           />
         </div>
       </div>
