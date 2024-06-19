@@ -8,10 +8,13 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
 }
 
+
 export default function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
   const generatePagination = (current: number, total: number) => {
-    const delta = 2;
-    const range = [];
+    const delta = 2; // how many pages to show before and after the current page
+    const range = []; // array of page numbers to display
+
+    // loop from the current page - delta to the current page + delta
     for (let i = Math.max(2, current - delta); i <= Math.min(total - 1, current + delta); i++) {
       range.push(i);
     }

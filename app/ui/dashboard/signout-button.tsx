@@ -5,10 +5,8 @@ import { PowerIcon } from '@heroicons/react/24/outline';
 
 export default function SignOutButton() {
     const handleSignOut = () => {
-        // Mostra una finestra di dialogo di conferma
         const confirmSignOut = confirm("Are you sure you want to sign out?");
         if (confirmSignOut) {
-            // Procede con il signOut se l'utente conferma
             signOut({
                 redirect: true,
                 callbackUrl: `${window.location.origin}/`

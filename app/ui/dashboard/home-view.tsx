@@ -44,7 +44,7 @@ export default function HomeView() {
     todayAppointments: [] as Appointment[],
     earningsData: [] as Earning[],
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Update loading state
 
   useEffect(() => {
     const getData = async () => {
@@ -56,6 +56,7 @@ export default function HomeView() {
     getData();
   }, []);
 
+  // Format appointments for the calendar
   const formatEvents = (appointments: Appointment[]) => {
     return appointments.map((appointment) => ({
       id: appointment.id,

@@ -47,6 +47,7 @@ export default function EditCustomerForm({ id }: EditCustomerFormProps) {
     },
   });
 
+  // Fetch customer data on component mount
   useEffect(() => {
     if (id) {
       const fetchCustomer = async () => {

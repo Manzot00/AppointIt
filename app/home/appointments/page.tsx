@@ -15,6 +15,7 @@ export default async function AppointmentsPage() {
     where: { userId: session?.user.id },
   });
 
+  // Format appointments for the calendar
   const formattedAppointments = appointments.map(appointment => ({
     id: appointment.id,
     title: `${appointment.type} - ${appointment.customer.name} ${appointment.customer.surname}`,

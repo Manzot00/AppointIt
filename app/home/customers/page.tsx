@@ -13,10 +13,10 @@ export default async function Page() {
     where: { userId: session?.user.id },
     orderBy: [
       {
-        surname: 'asc', // Ordina in ordine alfabetico crescente per il campo 'name'
+        surname: 'asc', // order alphabetically by the 'surname' field
       },
       {
-        name: 'asc', // Poi ordina in ordine alfabetico crescente per il campo 'surname'
+        name: 'asc', // then by the 'name' field
       },
     ],
   });

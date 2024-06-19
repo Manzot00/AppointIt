@@ -4,7 +4,6 @@ import Pagination from '@/app/ui/customers/pagination';
 import { useState, useEffect } from 'react';
 import { TrashIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { CustomerTableSkeleton } from '../skeletons';
 
 interface Customer {
   id: string;
@@ -20,7 +19,7 @@ interface CustomersTableProps {
 
 export default function CustomersTable({ initialCustomers }: CustomersTableProps) {
   const [customers, setCustomers] = useState<Customer[]>(initialCustomers);
-  const [filteredCustomers, setFilteredCustomers] = useState<Customer[]>(initialCustomers);
+  const [filteredCustomers, setFilteredCustomers] = useState<Customer[]>(initialCustomers); // Update filtered customers
 
   const [currentPage, setCurrentPage] = useState(1);
   const customersPerPage = 8;
@@ -30,6 +29,7 @@ export default function CustomersTable({ initialCustomers }: CustomersTableProps
   const searchParams = useSearchParams();
   const query = searchParams.get("query") || "";
 
+  // Filter customers based on search query
   useEffect(() => {
     setFilteredCustomers(
       customers.filter(customer => 

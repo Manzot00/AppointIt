@@ -11,12 +11,14 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { lusitana } from '@/app/ui/fonts';
 
+// Define the types for the Customer 
 interface Customer {
     id: string;
     name: string;
     surname: string;
   }
 
+// Define the types for the Appointment
 interface Appointment {
   id: string;
   title: string;
@@ -35,11 +37,13 @@ interface Appointment {
   };
 }
 
+// Define the types for the CalendarProps
 interface CalendarProps {
     appointments: Appointment[];
     customers: Customer[];
 }
 
+// Define the FormSchema for the form validation
 const FormSchema = z.object({
   type: z.string().min(1, 'Type is required'),
   customerId: z.string().min(1, 'Customer is required'),
@@ -58,10 +62,10 @@ const FormSchema = z.object({
 });
 
 export default function Calendar({ appointments, customers }: CalendarProps) {
-  const [selectedEvent, setSelectedEvent] = useState<Appointment | null>(null);
-  const [events, setEvents] = useState<Appointment[]>(appointments);
-  const [isEditing, setIsEditing] = useState(false);
-  const [filterStatus, setFilterStatus] = useState<string>('ALL');
+  const [selectedEvent, setSelectedEvent] = useState<Appointment | null>(null); // used to store the selected event
+  const [events, setEvents] = useState<Appointment[]>(appointments); // used to store the appointments
+  const [isEditing, setIsEditing] = useState(false); // used to determine if the modal is in edit mode
+  const [filterStatus, setFilterStatus] = useState<string>('ALL'); //used to filter appointments by status
 
   const {
     register,
@@ -81,6 +85,7 @@ export default function Calendar({ appointments, customers }: CalendarProps) {
     },
   });
 
+  // Set the form values with the selected event data (used when pressing on an event to edit it)
   const handleEventClick = ({ event }: any) => {
     const startDate = new Date(event.start);
     const endDate = new Date(event.end);
@@ -113,6 +118,7 @@ export default function Calendar({ appointments, customers }: CalendarProps) {
     });
   };
 
+  // Set all the values to default when adding a new event (via the +Add button)
   const handleAddClick = () => {
     setIsEditing(false);
     setSelectedEvent({
@@ -140,9 +146,11 @@ export default function Calendar({ appointments, customers }: CalendarProps) {
     });
   };
 
+  // Set the start and end time of the new event when clicking on a date
   const handleDateClick = (arg: any) => {
     const startDate = new Date(arg.date);
     const endDate = new Date(arg.date);
+    // Add 2 hours to the start time and 1 hour to the end time to fix the timezone issue and set the default duration to 1 hour
     startDate.setHours(startDate.getHours() + 2);
     endDate.setHours(startDate.getHours() + 1);
     
@@ -178,8 +186,7 @@ export default function Calendar({ appointments, customers }: CalendarProps) {
   };
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-    //if (isEditing)
-    //  console.log('Editing appointment:', selectedEvent?.id);
+    // Send a POST request to add a new appointment or a PUT request to update an existing one
     const url = isEditing ? `/api/edit/appointment/${selectedEvent?.id}` : '/api/add/appointment';
     const method = isEditing ? 'PUT' : 'POST';
 
@@ -201,7 +208,7 @@ export default function Calendar({ appointments, customers }: CalendarProps) {
 
     if (response.ok) {
       const responseData = await response.json();
-      //console.log("Response id:", responseData.appointment.id);
+
       const updatedEvent = {
         id: isEditing ? selectedEvent?.id : responseData.appointment.id,
         title: `${values.type} - ${customers.find(c => c.id === values.customerId)?.name} ${customers.find(c => c.id === values.customerId)?.surname}`,
@@ -236,7 +243,7 @@ export default function Calendar({ appointments, customers }: CalendarProps) {
         });
 
         if (response.ok) {
-          // Rimuovi l'evento dal calendario
+          // remove the deleted event from the state
           const updatedEvents = events.filter(event => event.id !== selectedEvent?.id);
           setEvents(updatedEvents);
           handleCloseModal();
@@ -247,6 +254,7 @@ export default function Calendar({ appointments, customers }: CalendarProps) {
     }
   };
 
+  // Filter the appointments based on the selected status
   const filteredEvents = events.filter(event => 
     filterStatus === 'ALL' || event.extendedProps.status === filterStatus
   );
@@ -288,13 +296,15 @@ export default function Calendar({ appointments, customers }: CalendarProps) {
             }}
             slotMinTime="00:00:00"
             slotMaxTime="24:00:00"
-            scrollTime="07:00:00"
-            firstDay={1}
+            scrollTime="07:00:00" // Start the calendar at 7am
+            firstDay={1} // Start the week on Monday
             events={filteredEvents}
             eventClick={handleEventClick}
             dateClick={handleDateClick}
             allDaySlot={false}
             height="85%"
+
+            // Add event listeners to highlight the hovered slot
             viewDidMount={({ view }) => {
               const handleMouseEnter = (event: Event) => {
                 const target = event.target as HTMLElement;
@@ -330,7 +340,6 @@ export default function Calendar({ appointments, customers }: CalendarProps) {
                 }
               };
             
-              // Aggiunge gli event listener al container appropriato per la vista corrente
               let calendarContainerSelector = '';
               if (view.type.includes('timeGrid')) {
                 calendarContainerSelector = '.fc-timegrid-body';

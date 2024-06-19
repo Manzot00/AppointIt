@@ -1,3 +1,4 @@
+// used to wrap the client side layout components
 "use client";
 
 import { SessionProvider } from "next-auth/react";
