@@ -7,6 +7,7 @@ import { Button } from './button';
 import Link from 'next/link';
 import * as z from 'zod';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const FormSchema = z
   .object({
@@ -30,6 +31,7 @@ const FormSchema = z
 
 export default function RegistrationForm() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -47,6 +49,7 @@ export default function RegistrationForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+    setLoading(true);
     const response = await fetch('/api/user', {
       method: 'POST',
       headers: {
@@ -69,6 +72,7 @@ export default function RegistrationForm() {
         });
       }
       console.error('Registration failed');
+      setLoading(false);
     }
   };
 
@@ -175,7 +179,13 @@ export default function RegistrationForm() {
             {errors.confirmPassword && <span className="text-red-500 text-xs">{errors.confirmPassword.message}</span>}
           </div>
         </div>
-        <RegisterButton />
+        {loading ? (
+          <div className="flex justify-center mt-4">
+            <div className="loader"></div>
+          </div>
+        ) : (
+          <RegisterButton />
+        )}
         <br /> <hr /> <br />
         <p style={{ fontSize: '14px' }}>If you already have an account, please <Link href="/login" className='text-blue-500 underline'>Sign In</Link></p>
       </div>

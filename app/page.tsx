@@ -29,6 +29,7 @@ export default function Page() {
             height={760}
             className="hidden md:block"
             alt="Screenshots of the AppointIt app showing desktop version"
+            priority={true}
           />
           <Image
             src="/preview-mobile.png"
@@ -36,6 +37,7 @@ export default function Page() {
             height={620}
             className="block md:hidden"
             alt="Screenshots of the AppointIt app showing mobile version"
+            priority={true}
           />
         </div>
       </div>

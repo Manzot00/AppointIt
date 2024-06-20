@@ -13,6 +13,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { set } from 'date-fns';
 
 // Define form schema for validation
 const FormSchema = z.object({
@@ -25,6 +27,7 @@ const FormSchema = z.object({
 
 export default function LoginForm() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -39,6 +42,7 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+    setLoading(true);
     const signInData = await signIn('credentials', {
       redirect: false,
       email: values.email,
@@ -48,6 +52,7 @@ export default function LoginForm() {
     if (signInData?.error) {
         alert("Invalid email or password");
         console.error('Login failed:', signInData.error);
+        setLoading(false);
     } else {
       router.refresh();
       router.push('/home');
@@ -100,7 +105,13 @@ export default function LoginForm() {
             {errors.password && <span className="text-red-500 text-xs">{errors.password.message}</span>}
           </div>
         </div>
-        <LoginButton />
+        {loading ? (
+          <div className="flex justify-center mt-4">
+            <div className="loader"></div>
+          </div>
+        ) : (
+          <LoginButton />
+        )}
         <br /> <hr /> <br />
         <p style={{ fontSize: '15px' }}>If you don&apos;t have an account, please <Link href="/register" className='text-blue-500 underline'>Sign Up</Link></p>
         <div className="flex h-8 items-end space-x-1">
